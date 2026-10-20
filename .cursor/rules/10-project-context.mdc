@@ -1,0 +1,24 @@
+---
+description: Architecture map, commands and conventions
+globs:
+alwaysApply: true
+---
+
+# Project context — merchant customer app (Android)
+
+## Map
+- `core/` shared library: `api/DurpallaApi.kt` (API client), `config/MerchantConfig.kt` (tenant config), `model/`, `data/AccountRepository.kt`, `auth/`, `account/`, `booking/` (Fare, Seats), `payment/`, `theme/Theme.kt`, `ui/Components.kt`.
+- `app/` with product flavors **bus** (`app/src/bus/…/bus/`) and **hotel** (`app/src/hotel/…/hotel/`); each has `Flavor.kt`, `*Feature.kt`, `*Screens.kt`, `*ViewModel.kt`, mock data in `BusData.kt` / `HotelData.kt`.
+- Entry: `app/src/main/…/MainActivity.kt`, `VerticalFeature.kt` (flavor plug-in point).
+- Config: `settings.gradle.kts`, `app/build.gradle.kts`, `core/build.gradle.kts`, `gradle/libs.versions.toml`.
+- Tests: `app/src/test` (RulesTest), screenshots in `testBus` / `testHotel` (Roborazzi).
+
+## Commands
+- Build: `./gradlew :app:assembleBusDebug` / `:app:assembleHotelDebug`
+- Test: `./gradlew :app:testBusDebugUnitTest --tests "*RulesTest"` (targeted)
+- Screenshots: `./gradlew :app:recordRoborazziBusDebug` (only when UI changes)
+
+## Conventions
+- Brand: bus blue `#0B3D91`, hotel teal `#0E6B63` (see `core/theme/Theme.kt`); use `PrimaryButton` etc. from `core/ui`.
+- Strings Bangla + English; Bangla digits for display, ASCII for the API.
+- Shared logic goes in `:core`; flavor-specific UI stays in its flavor source set.
